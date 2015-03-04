@@ -32,7 +32,7 @@
 
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="PushPlugin">
-                <param name="android-package" value="com.plugin.gcm.PushPlugin"/>
+                <param name="android-package" value="com.innobyte.push.PushPlugin"/>
             </feature>
         </config-file>
 
@@ -47,25 +47,28 @@
         </config-file>
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <activity android:name="com.plugin.gcm.PushHandlerActivity" android:exported="true"/>
-            <receiver android:name="com.plugin.gcm.CordovaGCMBroadcastReceiver"
+            <activity android:name="com.innobyte.push.PushHandlerActivity" android:exported="true"/>
+            <receiver android:name="com.innobyte.push.PushBroadcastReceiver"
                       android:permission="com.google.android.c2dm.permission.SEND">
                 <intent-filter>
                     <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-                    <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
                     <category android:name="$PACKAGE_NAME"/>
                 </intent-filter>
             </receiver>
-            <service android:name="com.plugin.gcm.GCMIntentService"/>
+            <service android:name="com.innobyte.push.GCMIntentService"/>
         </config-file>
 
         <source-file src="src/android/libs/gcm.jar" target-dir="libs/"/>
-        <source-file src="src/android/com/plugin/gcm/CordovaGCMBroadcastReceiver.java"
-                     target-dir="src/com/plugin/gcm/"/>
-        <source-file src="src/android/com/plugin/gcm/GCMIntentService.java" target-dir="src/com/plugin/gcm/"/>
-        <source-file src="src/android/com/plugin/gcm/PushHandlerActivity.java" target-dir="src/com/plugin/gcm/"/>
-        <source-file src="src/android/com/plugin/gcm/PushPlugin.java" target-dir="src/com/plugin/gcm/"/>
-        <source-file src="src/android/com/plugin/android-support-v13.jar" target-dir="libs/"/>
+        <source-file src="src/android/libs/android-support-v13.jar" target-dir="libs/"/>
+
+        <source-file src="src/android/com/innobyte/push/PushBroadcastReceiver.java"
+                     target-dir="src/com/innobyte/push/"/>
+        <source-file src="src/android/com/innobyte/push/GCMIntentService.java"
+                     target-dir="src/com/innobyte/push/"/>
+        <source-file src="src/android/com/innobyte/push/PushHandlerActivity.java"
+                     target-dir="src/com/innobyte/push/"/>
+        <source-file src="src/android/com/innobyte/push/PushPlugin.java"
+                     target-dir="src/com/innobyte/push/"/>
 
     </platform>
 
