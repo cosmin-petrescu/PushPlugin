@@ -28,26 +28,18 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 
 	The MIT License
 
-	Copyright (c) 2012 Adobe Systems, inc.
-	portions Copyright (c) 2012 Olivier Louvignes
+	Copyright 2015 SC Innobyte Solutions SRL. All rights reserved.
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
+	THIS SOFTWARE IS PROVIDED BY THE URBAN AIRSHIP INC``AS IS'' AND ANY EXPRESS OR
+	IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+	MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+	EVENT SHALL URBAN AIRSHIP INC OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+	INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+	BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+	DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+	LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+	OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+	ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 
 
@@ -68,48 +60,38 @@ This plugin is for use with [Cordova](http://incubator.apache.org/cordova/), and
 
 3) Modify your `AndroidManifest.xml` and add the following lines to your manifest tag:
 
-```xml
-<permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
-<uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
-<uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-```
+    <permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="$PACKAGE_NAME.permission.RECEIVE_ADM_MESSAGE" />
+    <uses-permission android:name="com.amazon.device.messaging.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 4) Modify your `AndroidManifest.xml` and add the following **activity**, **receiver** and **service** tags to your **application** section.
 
-```xml
-<amazon:enable-feature android:name="com.amazon.device.messaging" android:required="true"/>
-<service android:exported="false" android:name="com.amazon.cordova.plugin.ADMMessageHandler" />
-<activity android:name="com.amazon.cordova.plugin.ADMHandlerActivity" />
-<receiver android:name="com.amazon.cordova.plugin.ADMMessageHandler$Receiver" android:permission="com.amazon.device.messaging.permission.SEND">
-	<intent-filter>
-        	<action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
-                <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
-                <category android:name="$PACKAGE_NAME" />
-	</intent-filter>
-</receiver>
-```
+    <amazon:enable-feature android:name="com.amazon.device.messaging" android:required="true"/>
+    <service android:exported="false" android:name="com.amazon.cordova.plugin.ADMMessageHandler" />
+    <activity android:name="com.amazon.cordova.plugin.ADMHandlerActivity" />
+    <receiver android:name="com.amazon.cordova.plugin.ADMMessageHandler$Receiver" android:permission="com.amazon.device.messaging.permission.SEND">
+        <intent-filter>
+                <action android:name="com.amazon.device.messaging.intent.REGISTRATION" />
+                    <action android:name="com.amazon.device.messaging.intent.RECEIVE" />
+                    <category android:name="$PACKAGE_NAME" />
+        </intent-filter>
+    </receiver>
 
 5) If you are using Cordova 3.4.0 or earlier, modify your `AndroidManifest.xml` and add "amazon" XML namespace to <manifest> tag:
 
-```xml
-xmlns:amazon="http://schemas.amazon.com/apk/res/android"
-```
+    xmlns:amazon="http://schemas.amazon.com/apk/res/android"
 
 6) Modify `res/xml/config.xml` to add a reference to PushPlugin:
 
-```xml
-<feature name="PushPlugin" >
-	<param name="android-package" value="com.amazon.cordova.plugin.PushPlugin"/>
-</feature>
-```
+    <feature name="PushPlugin" >
+        <param name="android-package" value="com.amazon.cordova.plugin.PushPlugin"/>
+    </feature>
 
 7) Modify `res/xml/config.xml` to set config options to let Cordova know whether to display ADM message in the notification center or not. If not, provide the default message. By default, message will be visible in the notification. These config options are used if message arrives and app is not in the foreground (either killed or running in the background).
 
-```xml
-<preference name="showmessageinnotification" value="true" />
-<preference name="defaultnotificationmessage" value="New message has arrived!" />
-```
+    <preference name="showmessageinnotification" value="true" />
+    <preference name="defaultnotificationmessage" value="New message has arrived!" />
 
 8) Create an file called `api_key.txt` in the platforms/amazon-fireos/assets folder containing the API Key from the "Security Profile Android/Kindle Settings" tab on the [Amazon Developer Portal](https://developer.amazon.com/sdk/adm.html). For detailed steps on how to register for ADM please refer to section below: [Registering your app for Amazon Device Messaging (ADM)](#registering_for_adm)
 
@@ -144,100 +126,79 @@ The final hierarchy will likely look something like this:
 
 2) Modify your `AndroidManifest.xml` and add the following lines to your manifest tag:
 
-```xml
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-<uses-permission android:name="android.permission.GET_ACCOUNTS" />
-<uses-permission android:name="android.permission.WAKE_LOCK" />
-<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-<permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-<uses-permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" />
-```
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+    <uses-permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" />
 
 3) Modify your `AndroidManifest.xml` and add the following **activity**, **receiver** and **service** tags to your **application** section. (See the Sample_AndroidManifest.xml file in the Example folder.)
 
-```xml
-<activity android:name="com.plugin.gcm.PushHandlerActivity"/>
-<receiver android:name="com.plugin.gcm.CordovaGCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
-	<intent-filter>
-		<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-		<action android:name="com.google.android.c2dm.intent.REGISTRATION" />
-		<category android:name="$PACKAGE_NAME" />
-	</intent-filter>
-</receiver>
-<service android:name="com.plugin.gcm.GCMIntentService" />
-```
+    <activity android:name="com.plugin.gcm.PushHandlerActivity"/>
+    <receiver android:name="com.plugin.gcm.CordovaGCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND" >
+        <intent-filter>
+            <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+            <category android:name="$PACKAGE_NAME" />
+        </intent-filter>
+    </receiver>
+    <service android:name="com.plugin.gcm.GCMIntentService" />
 
 4) Check that the launch mode for the main Cordova Activity is one of the **[singleXXX](http://developer.android.com/guide/topics/manifest/activity-element.html#lmode)** options in **AndroidManifest.xml**.
 
-```xml
-<activity ... android:launchMode="singleTop">
-```
+    <activity ... android:launchMode="singleTop">
 
 Otherwise a new activity instance, with a new webview, will be created when activating the notifications.
 
 5) Modify your `res/xml/config.xml` to include the following line in order to tell Cordova to include this plugin and where it can be found: (See the Sample_config.xml file in the Example folder)
 
-```xml
-<feature name="PushPlugin">
-  <param name="android-package" value="com.plugin.gcm.PushPlugin" />
-</feature>
-```
+    <feature name="PushPlugin">
+      <param name="android-package" value="com.plugin.gcm.PushPlugin" />
+    </feature>
 
 6) Add the `PushNotification.js` script to your assets/www folder (or javascripts folder, wherever you want really) and reference it in your main index.html file. This file's usage is described in the **Plugin API** section below.
 
-```html
-<script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
-```
+    <script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
 
 ### Manual Installation for iOS
 
 Copy the following files to your project's Plugins folder:
 
-```
-AppDelegate+notification.h
-AppDelegate+notification.m
-PushPlugin.h
-PushPlugin.m
-```
+    AppDelegate+notification.h
+    AppDelegate+notification.m
+    PushPlugin.h
+    PushPlugin.m
 
 Add a reference for this plugin to the plugins section in `config.xml`:
 
-```xml
-<feature name="PushPlugin">
-  <param name="ios-package" value="PushPlugin" />
-</feature>
-```
+    <feature name="PushPlugin">
+      <param name="ios-package" value="PushPlugin" />
+    </feature>
 
 Add the `PushNotification.js` script to your assets/www folder (or javascripts folder, wherever you want really) and reference it in your main index.html file.
 
-```html
-<script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
-```
+    <script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
 
 ### Manual Installation for WP8
 
 Copy the following files to your project's Commands folder and add it to the VS project:
 
-```
-PushPlugin.cs
-```
+    PushPlugin.cs
 
 Add a reference to this plugin in `config.xml`:
 
-```xml
-<feature name="PushPlugin">
-  <param name="wp-package" value="PushPlugin" />
-</feature>
-```
+    <feature name="PushPlugin">
+      <param name="wp-package" value="PushPlugin" />
+    </feature>
 
 Add the `PushNotification.js` script to your assets/www folder (or javascripts folder, wherever you want really) and reference it in your main index.html file.
-```html
-<script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
-```
+
+    <script type="text/javascript" charset="utf-8" src="PushNotification.js"></script>
 
 Do not forget to reference the `cordova.js` as well.
 
-<script  type="text/javascript" charset="utf-8" src="cordova.js"></script>
+    <script  type="text/javascript" charset="utf-8" src="cordova.js"></script>
 
 In your Visual Studio project add reference to the `Newtonsoft.Json.dll` as well - it is needed for serialization and deserialization of the objects.
 
@@ -246,9 +207,8 @@ Also you need to enable the **"ID_CAP_PUSH_NOTIFICATION"** capability in **Prope
 ### Manual Installation for Windows8
 
 Add the `src/windows8/PushPluginProxy.js` script to your `www` folder and reference it in your main index.html file.
-```html
-<script type="text/javascript" charset="utf-8" src="PushPluginProxy.js"></script>
-```
+
+    <script type="text/javascript" charset="utf-8" src="PushPluginProxy.js"></script>
 
 Do not forget to reference the `cordova.js` as well.
 
@@ -270,9 +230,7 @@ The plugin can be installed via the Cordova command line interface:
 
 1) Navigate to the root folder for your phonegap project. 2) Run the command.
 
-```sh
-cordova plugin add https://github.com/cosmin-petrescu/PushPlugin.git
-```
+    cordova plugin add https://github.com/cosmin-petrescu/PushPlugin.git
 
 ### Phonegap
 
@@ -280,22 +238,8 @@ The plugin can be installed using the Phonegap command line interface:
 
 1) Navigate to the root folder for your phonegap project. 2) Run the command.
 
-```sh
-phonegap local plugin add https://github.com/cosmin-petrescu/PushPlugin.git
-```
+    phonegap local plugin add https://github.com/cosmin-petrescu/PushPlugin.git
 
-### Plugman
-
-The plugin is based on [plugman](https://github.com/apache/cordova-plugman) and can be installed using the Plugman command line interface:
-
-```sh
-plugman install --platform [PLATFORM] --project [TARGET-PATH] --plugin [PLUGIN-PATH]
-
-where
-	[PLATFORM] = ios, amazon-fireos, android, wp8, windows8 or blackberry10
-	[TARGET-PATH] = path to folder containing your phonegap project
-	[PLUGIN-PATH] = path to folder containing this plugin
-```
 
 
 
@@ -308,53 +252,49 @@ In the plugin `examples` folder you will find a sample implementation showing ho
 #### pushNotification
 The plugin instance variable.
 
-```js
-var pushNotification;
-
-document.addEventListener("deviceready", function(){
-    pushNotification = window.plugins.pushNotification;
-    ...
-});
-```
+	var pushNotification;
+	
+	document.addEventListener("deviceready", function(){
+	    pushNotification = window.plugins.pushNotification;
+	    ...
+	});
 
 #### register
 To be called as soon as the device becomes ready.
 
-```js
-$("#app-status-ul").append('<li>registering ' + device.platform + '</li>');
-if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
-    pushNotification.register(
-    successHandler,
-    errorHandler,
-    {
-        "senderID":"replace_with_sender_id",
-        "ecb":"onNotification"
-    });
-} else if ( device.platform == 'blackberry10'){
-    pushNotification.register(
-    successHandler,
-    errorHandler,
-    {
-        invokeTargetId : "replace_with_invoke_target_id",
-        appId: "replace_with_app_id",
-        ppgUrl:"replace_with_ppg_url", //remove for BES pushes
-        ecb: "pushNotificationHandler",
-        simChangeCallback: replace_with_simChange_callback,
-        pushTransportReadyCallback: replace_with_pushTransportReady_callback,
-        launchApplicationOnPush: true
-    });
-} else {
-    pushNotification.register(
-    tokenHandler,
-    errorHandler,
-    {
-        "badge":"true",
-        "sound":"true",
-        "alert":"true",
-        "ecb":"onNotificationAPN"
-    });
-}
-```
+	$("#app-status-ul").append('<li>registering ' + device.platform + '</li>');
+	if ( device.platform == 'android' || device.platform == 'Android' || device.platform == "amazon-fireos" ){
+	    pushNotification.register(
+	    successHandler,
+	    errorHandler,
+	    {
+	        "senderID":"replace_with_sender_id",
+	        "ecb":"onNotification"
+	    });
+	} else if ( device.platform == 'blackberry10'){
+	    pushNotification.register(
+	    successHandler,
+	    errorHandler,
+	    {
+	        invokeTargetId : "replace_with_invoke_target_id",
+	        appId: "replace_with_app_id",
+	        ppgUrl:"replace_with_ppg_url", //remove for BES pushes
+	        ecb: "pushNotificationHandler",
+	        simChangeCallback: replace_with_simChange_callback,
+	        pushTransportReadyCallback: replace_with_pushTransportReady_callback,
+	        launchApplicationOnPush: true
+	    });
+	} else {
+	    pushNotification.register(
+	    tokenHandler,
+	    errorHandler,
+	    {
+	        "badge":"true",
+	        "sound":"true",
+	        "alert":"true",
+	        "ecb":"onNotificationAPN"
+	    });
+	}
 
 On success, you will get a call to tokenHandler (iOS), onNotification (Android and Amazon Fire OS), onNotificationWP8 (WP8) or successHandler (Blackberry10), allowing you to obtain the device token or registration ID, or push channel name and Uri respectively. Those values will typically get posted to your intermediary push server so it knows who it can send notifications to.
 
@@ -372,127 +312,117 @@ On success, you will get a call to tokenHandler (iOS), onNotification (Android a
 #### successHandler
 Called when a plugin method returns without error
 
-```js
-// result contains any message sent from the plugin call
-function successHandler (result) {
-	alert('result = ' + result);
-}
-```
+	// result contains any message sent from the plugin call
+	function successHandler (result) {
+		alert('result = ' + result);
+	}
 
 #### errorHandler
 Called when the plugin returns an error
 
-```js
-// result contains any error description text returned from the plugin call
-function errorHandler (error) {
-	alert('error = ' + error);
-}
-```
+	// result contains any error description text returned from the plugin call
+	function errorHandler (error) {
+		alert('error = ' + error);
+	}
 
 #### ecb (Amazon Fire OS, Android and iOS)
 Event callback that gets called when your device receives a notification
 
-```js
 // iOS
-function onNotificationAPN (event) {
-	if ( event.alert )
-	{
-		navigator.notification.alert(event.alert);
+	function onNotificationAPN (event) {
+		if ( event.alert )
+		{
+			navigator.notification.alert(event.alert);
+		}
+	
+		if ( event.sound )
+		{
+			var snd = new Media(event.sound);
+			snd.play();
+		}
+	
+		if ( event.badge )
+		{
+			pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
+		}
 	}
 
-	if ( event.sound )
-	{
-		var snd = new Media(event.sound);
-		snd.play();
-	}
-
-	if ( event.badge )
-	{
-		pushNotification.setApplicationIconBadgeNumber(successHandler, errorHandler, event.badge);
-	}
-}
-```
-
-```js
 // Android and Amazon Fire OS
-function onNotification(e) {
-	$("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
+    function onNotification(e) {
+        $("#app-status-ul").append('<li>EVENT -> RECEIVED:' + e.event + '</li>');
 
-	switch( e.event )
-	{
-	case 'registered':
-		if ( e.regid.length > 0 )
-		{
-			$("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
-			// Your GCM push server needs to know the regID before it can push to this device
-			// here is where you might want to send it the regID for later use.
-			console.log("regID = " + e.regid);
-		}
-	break;
+        switch( e.event )
+        {
+        case 'registered':
+            if ( e.regid.length > 0 )
+            {
+                $("#app-status-ul").append('<li>REGISTERED -> REGID:' + e.regid + "</li>");
+                // Your GCM push server needs to know the regID before it can push to this device
+                // here is where you might want to send it the regID for later use.
+                console.log("regID = " + e.regid);
+            }
+        break;
 
-	case 'message':
-		// if this flag is set, this notification happened while we were in the foreground.
-		// you might want to play a sound to get the user's attention, throw up a dialog, etc.
-		if ( e.foreground )
-		{
-			$("#app-status-ul").append('<li>--INLINE NOTIFICATION--' + '</li>');
+        case 'message':
+            // if this flag is set, this notification happened while we were in the foreground.
+            // you might want to play a sound to get the user's attention, throw up a dialog, etc.
+            if ( e.foreground )
+            {
+                $("#app-status-ul").append('<li>--INLINE NOTIFICATION--' + '</li>');
 
-			// on Android soundname is outside the payload.
-			// On Amazon FireOS all custom attributes are contained within payload
-			var soundfile = e.soundname || e.payload.sound;
-			// if the notification contains a soundname, play it.
-			var my_media = new Media("/android_asset/www/"+ soundfile);
-			my_media.play();
-		}
-		else
-		{  // otherwise we were launched because the user touched a notification in the notification tray.
-			if ( e.coldstart )
-			{
-				$("#app-status-ul").append('<li>--COLDSTART NOTIFICATION--' + '</li>');
-			}
-			else
-			{
-				$("#app-status-ul").append('<li>--BACKGROUND NOTIFICATION--' + '</li>');
-			}
-		}
+                // on Android soundname is outside the payload.
+                // On Amazon FireOS all custom attributes are contained within payload
+                var soundfile = e.soundname || e.payload.sound;
+                // if the notification contains a soundname, play it.
+                var my_media = new Media("/android_asset/www/"+ soundfile);
+                my_media.play();
+            }
+            else
+            {  // otherwise we were launched because the user touched a notification in the notification tray.
+                if ( e.coldstart )
+                {
+                    $("#app-status-ul").append('<li>--COLDSTART NOTIFICATION--' + '</li>');
+                }
+                else
+                {
+                    $("#app-status-ul").append('<li>--BACKGROUND NOTIFICATION--' + '</li>');
+                }
+            }
 
-	   $("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
-           //Only works for GCM
-	   $("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
-	   //Only works on Amazon Fire OS
-	   $status.append('<li>MESSAGE -> TIME: ' + e.payload.timeStamp + '</li>');
-	break;
+           $("#app-status-ul").append('<li>MESSAGE -> MSG: ' + e.payload.message + '</li>');
+               //Only works for GCM
+           $("#app-status-ul").append('<li>MESSAGE -> MSGCNT: ' + e.payload.msgcnt + '</li>');
+           //Only works on Amazon Fire OS
+           $status.append('<li>MESSAGE -> TIME: ' + e.payload.timeStamp + '</li>');
+        break;
 
-	case 'error':
-		$("#app-status-ul").append('<li>ERROR -> MSG:' + e.msg + '</li>');
-	break;
+        case 'error':
+            $("#app-status-ul").append('<li>ERROR -> MSG:' + e.msg + '</li>');
+        break;
 
-	default:
-		$("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
-	break;
-  }
-}
-```
-
-```js
-// BlackBerry10
-function pushNotificationHandler(pushpayload) {
-    var contentType = pushpayload.headers["Content-Type"],
-        id = pushpayload.id,
-        data = pushpayload.data;//blob
-
-    // If an acknowledgement of the push is required (that is, the push was sent as a confirmed push
-    // - which is equivalent terminology to the push being sent with application level reliability),
-    // then you must either accept the push or reject the push
-    if (pushpayload.isAcknowledgeRequired) {
-        // In our sample, we always accept the push, but situations might arise where an application
-        // might want to reject the push (for example, after looking at the headers that came with the push
-        // or the data of the push, we might decide that the push received did not match what we expected
-        // and so we might want to reject it)
-        pushpayload.acknowledge(true);
+        default:
+            $("#app-status-ul").append('<li>EVENT -> Unknown, an event was received and we do not know what it is</li>');
+        break;
+      }
     }
-};
-```
+
+// BlackBerry10
+    function pushNotificationHandler(pushpayload) {
+        var contentType = pushpayload.headers["Content-Type"],
+            id = pushpayload.id,
+            data = pushpayload.data;//blob
+
+        // If an acknowledgement of the push is required (that is, the push was sent as a confirmed push
+        // - which is equivalent terminology to the push being sent with application level reliability),
+        // then you must either accept the push or reject the push
+        if (pushpayload.isAcknowledgeRequired) {
+            // In our sample, we always accept the push, but situations might arise where an application
+            // might want to reject the push (for example, after looking at the headers that came with the push
+            // or the data of the push, we might decide that the push received did not match what we expected
+            // and so we might want to reject it)
+            pushpayload.acknowledge(true);
+        }
+    };
 
 Looking at the above message handling code for Android/Amazon Fire OS, a few things bear explanation. Your app may receive a notification while it is active (INLINE). If you background the app by hitting the Home button on your device, you may later receive a status bar notification. Selecting that notification from the status will bring your app to the front and allow you to process the notification (BACKGROUND). Finally, should you completely exit the app by hitting the back button from the home page, you may still receive a notification. Touching that notification in the notification tray will relaunch your app and allow you to process the notification (COLDSTART). In this case the **coldstart** flag will be set on the incoming event. You can look at the **foreground** flag on the event to determine whether you are processing a background or an in-line notification. You may choose, for example to play a sound or show a dialog only for inline or coldstart notifications since the user has already been alerted via the status bar.
 
@@ -509,50 +439,40 @@ This is the Google project ID you need to obtain by [registering your applicatio
 #### tokenHandler (iOS only)
 Called when the device has registered with a unique device token.
 
-```js
-function tokenHandler (result) {
-    // Your iOS push server needs to know the token before it can push to this device
-    // here is where you might want to send it the token for later use.
-    alert('device token = ' + result);
-}
-```
+    function tokenHandler (result) {
+        // Your iOS push server needs to know the token before it can push to this device
+        // here is where you might want to send it the token for later use.
+        alert('device token = ' + result);
+    }
 
 #### setApplicationIconBadgeNumber (iOS only)
 Set the badge count visible when the app is not running
 
-```js
-pushNotification.setApplicationIconBadgeNumber(successCallback, errorCallback, badgeCount);
-```
+    pushNotification.setApplicationIconBadgeNumber(successCallback, errorCallback, badgeCount);
 
 The `badgeCount` is an integer indicating what number should show up in the badge. Passing 0 will clear the badge.
 
 #### unregister (Amazon Fire OS, Android and iOS)
 You will typically call this when your app is exiting, to cleanup any used resources. Its not strictly necessary to call it, and indeed it may be desireable to NOT call it if you are debugging your intermediarry push server. When you call unregister(), the current token for a particular device will get invalidated, and the next call to register() will return a new token. If you do NOT call unregister(), the last token will remain in effect until it is invalidated for some reason at the GCM/ADM side. Since such invalidations are beyond your control, its recommended that, in a production environment, that you have a matching unregister() call, for every call to register(), and that your server updates the devices' records each time.
 
-```js
-pushNotification.unregister(successHandler, errorHandler, options);
-```
+    pushNotification.unregister(successHandler, errorHandler, options);
 
 
 ### WP8
 
 #### register (WP8 Only)
 
-```js
-
-if(device.platform == "Win32NT"){
-    pushNotification.register(
-        channelHandler,
-        errorHandler,
-        {
-            "channelName": channelName,
-            "ecb": "onNotificationWP8",
-            "uccb": "channelHandler",
-            "errcb": "jsonErrorHandler"
-        });
-}
-
-```
+    if(device.platform == "Win32NT"){
+        pushNotification.register(
+            channelHandler,
+            errorHandler,
+            {
+                "channelName": channelName,
+                "ecb": "onNotificationWP8",
+                "uccb": "channelHandler",
+                "errcb": "jsonErrorHandler"
+            });
+    }
 
 #### channelHandler (WP8 only)
 Called after a push notification channel is opened and push notification URI is returned. [The application is now set to receive notifications.](http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202940(v=vs.105).aspx)
@@ -561,22 +481,20 @@ Called after a push notification channel is opened and push notification URI is 
 #### ecb (WP8 Only)
 Event callback that gets called when your device receives a notification. This is fired if the app is running when you receive the toast notification, or raw notification.
 
-```js
-//handle MPNS notifications for WP8
-function onNotificationWP8(e) {
+    //handle MPNS notifications for WP8
+    function onNotificationWP8(e) {
 
-	if (e.type == "toast" && e.jsonContent) {
-		pushNotification.showToastNotification(successHandler, errorHandler,
-		{
-			"Title": e.jsonContent["wp:Text1"], "Subtitle": e.jsonContent["wp:Text2"], "NavigationUri": e.jsonContent["wp:Param"]
-		});
-		}
+        if (e.type == "toast" && e.jsonContent) {
+            pushNotification.showToastNotification(successHandler, errorHandler,
+            {
+                "Title": e.jsonContent["wp:Text1"], "Subtitle": e.jsonContent["wp:Text2"], "NavigationUri": e.jsonContent["wp:Param"]
+            });
+            }
 
-	if (e.type == "raw" && e.jsonContent) {
-		alert(e.jsonContent.Body);
-	}
-}
-```
+        if (e.type == "raw" && e.jsonContent) {
+            alert(e.jsonContent.Body);
+        }
+    }
 
 #### uccb (WP8 only)
 Event callback that gets called when the channel you have opened gets its Uri updated. This function is needed in case the MPNS updates the opened channel Uri. This function will take care of showing updated Uri.
@@ -585,12 +503,10 @@ Event callback that gets called when the channel you have opened gets its Uri up
 #### errcb (WP8 only)
 Event callback that gets called when server error occurs when receiving notification from the MPNS server (for example invalid format of the notification).
 
-```js
-function jsonErrorHandler(error) {
-		$("#app-status-ul").append('<li style="color:red;">error:' + error.code + '</li>');
-		$("#app-status-ul").append('<li style="color:red;">error:' + error.message + '</li>');
-	}
-```
+    function jsonErrorHandler(error) {
+            $("#app-status-ul").append('<li style="color:red;">error:' + error.code + '</li>');
+            $("#app-status-ul").append('<li style="color:red;">error:' + error.message + '</li>');
+        }
 
 #### showToastNotification (WP8 only)
 Show toast notification if app is deactivated.
@@ -601,22 +517,22 @@ The toast notification's properties are set explicitly using json. They can be g
 
 
 To control the launch page when the user taps on your toast notification when the app is not running, add the following code to your mainpage.xaml.cs
-```cs
-protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
-{
-    base.OnNavigatedTo(e);
-    try
+
+    protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)
     {
-        if (this.NavigationContext.QueryString["NavigatedFrom"] == "toast") // this is set on the server
+        base.OnNavigatedTo(e);
+        try
         {
-            this.PGView.StartPageUri = new Uri("//www/index.html#notification-page", UriKind.Relative);
+            if (this.NavigationContext.QueryString["NavigatedFrom"] == "toast") // this is set on the server
+            {
+                this.PGView.StartPageUri = new Uri("//www/index.html#notification-page", UriKind.Relative);
+            }
+        }
+        catch (KeyNotFoundException)
+        {
         }
     }
-    catch (KeyNotFoundException)
-    {
-    }
-}
-```
+
 Or you can add another `Page2.xaml` just for testing toast navigate url. Like the [MSDN Toast Sample](http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202967(v=vs.105).aspx)
 
 To test the tile notification, you will need to add tile images like the [MSDN Tile Sample](http://msdn.microsoft.com/en-us/library/windowsphone/develop/hh202970(v=vs.105).aspx#BKMK_CreatingaPushClienttoReceiveTileNotifications)
@@ -625,74 +541,67 @@ To test the tile notification, you will need to add tile images like the [MSDN T
 
 When using the plugin for wp8 you will need to unregister the push channel you have register in case you would want to open another one. You need to know the name of the channel you have opened in order to close it. Please keep in mind that one application can have only one opened channel at time and in order to open another you will have to close any already opened channel.
 
-```cs
-function unregister() {
-	var channelName = $("#channel-btn").val();
-	pushNotification.unregister(
-		successHandler, errorHandler,
-			{
-				"channelName": channelName
-			});
-}
-```
+    function unregister() {
+        var channelName = $("#channel-btn").val();
+        pushNotification.unregister(
+            successHandler, errorHandler,
+                {
+                    "channelName": channelName
+                });
+    }
 
 You'll probably want to trap on the **backbutton** event and only call this when the home page is showing. Remember, the back button on android is not the same as the Home button. When you hit the back button from the home page, your activity gets dismissed. Here is an example of how to trap the backbutton event;
 
-```js
-function onDeviceReady() {
-	$("#app-status-ul").append('<li>deviceready event received</li>');
+    function onDeviceReady() {
+        $("#app-status-ul").append('<li>deviceready event received</li>');
 
-	document.addEventListener("backbutton", function(e)
-	{
-		$("#app-status-ul").append('<li>backbutton event received</li>');
+        document.addEventListener("backbutton", function(e)
+        {
+            $("#app-status-ul").append('<li>backbutton event received</li>');
 
-		if( $("#home").length > 0 )
-		{
-			e.preventDefault();
-			pushNotification.unregister(successHandler, errorHandler);
-			navigator.app.exitApp();
-		}
-		else
-		{
-			navigator.app.backHistory();
-		}
-	}, false);
+            if( $("#home").length > 0 )
+            {
+                e.preventDefault();
+                pushNotification.unregister(successHandler, errorHandler);
+                navigator.app.exitApp();
+            }
+            else
+            {
+                navigator.app.backHistory();
+            }
+        }, false);
 
-	// additional onDeviceReady work...
-}
-```
+        // additional onDeviceReady work...
+    }
 
 For the above to work, make sure the content for your home page is wrapped in an element with an id of home, like this;
 
-```html
-<div id="home">
-	<div id="app-status-div">
-		<ul id="app-status-ul">
-			<li>Cordova PushNotification Plugin Demo</li>
-		</ul>
-	</div>
-</div>
-```
+    <div id="home">
+        <div id="app-status-div">
+            <ul id="app-status-ul">
+                <li>Cordova PushNotification Plugin Demo</li>
+            </ul>
+        </div>
+    </div>
 
 ### windows8
 Sample usage is showed below. **Note**. To be able to receive toast notifications additional [toastCapable=’true’](http://msdn.microsoft.com/en-us/library/windows/apps/hh781238.aspx) attribute is required in manifest file.
 
-```js
-// fired when push notification is received
-window.onNotification = function (e) {
-    navigator.notification.alert('Notification received: ' + JSON.stringify(e));
-}  
-var pushNotification = window.plugins.pushNotification;
-pushNotification.register(successHandler, errorHandler, {"channelName":"your_channel_name","ecb":"onNotification"});
+    // fired when push notification is received
+    window.onNotification = function (e) {
+        navigator.notification.alert('Notification received: ' + JSON.stringify(e));
+    }
+    var pushNotification = window.plugins.pushNotification;
+    pushNotification.register(successHandler, errorHandler, {"channelName":"your_channel_name","ecb":"onNotification"});
 
-function successHandler(result) {
-    console.log('registered###' + result.uri);
-    // send uri to your notification server
-}
-function errorHandler(error) {
-    console.log('error###' + error);
-}
-```
+    function successHandler(result) {
+        console.log('registered###' + result.uri);
+        // send uri to your notification server
+    }
+    function errorHandler(error) {
+        console.log('error###' + error);
+    }
+
 See [Sending push notifications with WNS](http://msdn.microsoft.com/en-us/library/windows/apps/hh465460.aspx) to send test push notification.
 
 
@@ -787,19 +696,12 @@ Both types of pushes require the use of a Push Initiator.
 
 For additional information on BlackBerry Push see https://developer.blackberry.com/services/push/.
 
-### Troubleshooting and next steps
+### Troubleshooting
 If all went well, you should see a notification show up on each device. If not, make sure you are not being blocked by a firewall, and that you have internet access. Check and recheck the token id, the registration ID and the certificate generating process.
 
 In a production environment, your app, upon registration, would send the device id (iOS) or the registration id (Android/Amazon), to your intermediary push server. For iOS, the push certificate would also be stored there, and would be used to authenticate push requests to the APNS server. When a push request is processed, this information is then used to target specific apps running on individual devices.
 
 If you're not up to building and maintaining your own intermediary push server, there are a number of commercial push services out there which support both APNS and GCM.
-
-- [Amazon Simple Notification Service](https://aws.amazon.com/sns/)
-- [kony](http://www.kony.com/push-notification-services)
-- [openpush](http://openpush.im)
-- [Pushwoosh](http://www.pushwoosh.com/)
-- [Urban Airship](http://urbanairship.com/products/push-notifications/)
-- etc.
 
 
 
