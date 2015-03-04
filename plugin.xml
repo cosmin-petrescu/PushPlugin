@@ -55,7 +55,7 @@
                     <category android:name="$PACKAGE_NAME"/>
                 </intent-filter>
             </receiver>
-            <service android:name="com.innobyte.push.GCMIntentService"/>
+            <service android:name="com.innobyte.push.PushIntentService"/>
         </config-file>
 
         <source-file src="src/android/libs/gcm.jar" target-dir="libs/"/>
@@ -63,7 +63,7 @@
 
         <source-file src="src/android/com/innobyte/push/PushBroadcastReceiver.java"
                      target-dir="src/com/innobyte/push/"/>
-        <source-file src="src/android/com/innobyte/push/GCMIntentService.java"
+        <source-file src="src/android/com/innobyte/push/PushIntentService.java"
                      target-dir="src/com/innobyte/push/"/>
         <source-file src="src/android/com/innobyte/push/PushHandlerActivity.java"
                      target-dir="src/com/innobyte/push/"/>
