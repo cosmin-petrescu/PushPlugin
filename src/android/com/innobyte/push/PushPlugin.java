@@ -1,5 +1,6 @@
 package com.innobyte.push;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -14,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+
+import java.io.IOException;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -49,68 +52,119 @@ public class PushPlugin extends CordovaPlugin {
 	}
 
 	@Override
-	public boolean execute(String action, JSONArray data, CallbackContext callbackContext) {
-
-		boolean result = false;
+	public boolean execute(final String action, final JSONArray data, final CallbackContext callbackContext) {
+		boolean result = true;
 
 		Log.v(TAG, "execute: action=" + action);
 
 		if (REGISTER.equals(action)) {
 
-			Log.v(TAG, "execute: data=" + data.toString());
+		    gWebView = this.webView;
 
-			try {
-				JSONObject jo = data.getJSONObject(0);
+		    cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
 
-				gWebView = this.webView;
-				Log.v(TAG, "execute: jo=" + jo.toString());
+        			Log.v(TAG, "execute: data=" + data.toString());
 
-				gECB = (String) jo.get("ecb");
-				gSenderID = (String) jo.get("senderID");
+                    try {
+                        JSONObject jo = data.getJSONObject(0);
 
-                if (googleCloudMessaging == null) {
-                    googleCloudMessaging = GoogleCloudMessaging.getInstance(context);
-                }
+                        Log.v(TAG, "execute: jo=" + jo.toString());
 
-				Log.v(TAG, "execute: ECB=" + gECB + " senderID=" + gSenderID);
+                        gECB = (String) jo.get("ecb");
+                        gSenderID = (String) jo.get("senderID");
 
-				String registrationId = googleCloudMessaging.register(gSenderID);
+                        if (googleCloudMessaging == null) {
+                            googleCloudMessaging = GoogleCloudMessaging.getInstance(getApplicationContext());
+                        }
 
-				result = true;
-				callbackContext.success();
-			} catch (IOException e) {
-			    Log.e(TAG, "execute: Got IO Exception " + e.getMessage());
-				result = false;
-				callbackContext.error(e.getMessage());
-			} catch (JSONException e) {
-				Log.e(TAG, "execute: Got JSON Exception " + e.getMessage());
-				result = false;
-				callbackContext.error(e.getMessage());
-			}
+                        Log.v(TAG, "execute: ECB=" + gECB + " senderID=" + gSenderID);
 
-			if ( gCachedExtras != null) {
-				Log.v(TAG, "sending cached extras");
-				sendExtras(gCachedExtras);
-				gCachedExtras = null;
-			}
+                        String registrationId = googleCloudMessaging.register(gSenderID);
+
+                        Log.v(TAG, "execute: registrationId=" + data.toString());
+
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                callbackContext.success();
+                            }
+                        });
+
+                        // wait for 100 ms
+                        try {
+                            Thread.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // send registered
+			            JSONObject registerJson = new JSONObject().put("event", "registered");
+                        registerJson.put("regid", registrationId);
+
+                        Log.v(TAG, "onRegistered: " + registerJson.toString());
+
+                        // Send this JSON data to the JavaScript application above EVENT should be set to the msg type
+                        // In this case this is the registration ID
+                        sendJavascript(registerJson);
+
+                    } catch (IOException e) {
+                        Log.e(TAG, "execute: Got IO Exception " + e.getMessage());
+                        final String exceptionMessage = e.getMessage();
+
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                callbackContext.error(exceptionMessage);
+                            }
+                        });
+                    } catch (JSONException e) {
+                        Log.e(TAG, "execute: Got JSON Exception " + e.getMessage());
+                        final String exceptionMessage = e.getMessage();
+
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                callbackContext.error(exceptionMessage);
+                            }
+                        });
+                    }
+
+                    if ( gCachedExtras != null) {
+                        Log.v(TAG, "sending cached extras");
+                        sendExtras(gCachedExtras);
+                        gCachedExtras = null;
+                    }
+			    }
+            });
 
 		} else if (UNREGISTER.equals(action)) {
 
-		    try {
-                if (googleCloudMessaging == null) {
-                    googleCloudMessaging = GoogleCloudMessaging.getInstance(context);
+            cordova.getThreadPool().execute(new Runnable() {
+                public void run() {
+                    try {
+                        if (googleCloudMessaging == null) {
+                            googleCloudMessaging = GoogleCloudMessaging.getInstance(getApplicationContext());
+                        }
+
+                        googleCloudMessaging.unregister();
+                    } catch (IOException e) {
+                        Log.e(TAG, "execute: Got IO Exception " + e.getMessage());
+                        final String exceptionMessage = e.getMessage();
+
+                        cordova.getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                callbackContext.error(exceptionMessage);
+                            }
+                        });
+                    }
+
+                    Log.v(TAG, "UNREGISTER");
+                    cordova.getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            callbackContext.success();
+                        }
+                    });
                 }
+            });
 
-                googleCloudMessaging.unregister();
-			} catch (IOException e) {
-			    Log.e(TAG, "execute: Got IO Exception " + e.getMessage());
-				result = false;
-				callbackContext.error(e.getMessage());
-            }
-
-			Log.v(TAG, "UNREGISTER");
-			result = true;
-			callbackContext.success();
 		} else {
 			result = false;
 			Log.e(TAG, "Invalid action : " + action);
@@ -262,7 +316,7 @@ public class PushPlugin extends CordovaPlugin {
 
     public static boolean isInForeground()
     {
-      return gForeground;
+        return gForeground;
     }
 
     public static boolean isActive()

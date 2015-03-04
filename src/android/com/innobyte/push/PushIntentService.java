@@ -1,12 +1,20 @@
 package com.innobyte.push;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Cosmin Petrescu on 04/03/15.
@@ -45,22 +53,20 @@ public class PushIntentService extends IntentService {
 
         String messageType = gcm.getMessageType(intent);
 
-        if (!extras.isEmpty() && messageType.equals(GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE)) {
+        if (null != extras
+            && !extras.isEmpty()
+            && messageType.equals(GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE)
+        ) {
+        	// if we are in the foreground, just surface the payload, else post it to the status bar
+            if (PushPlugin.isInForeground()) {
+        	    extras.putBoolean("foreground", true);
+                PushPlugin.sendExtras(extras);
+        	} else {
+        		extras.putBoolean("foreground", false);
 
-        	// Extract the payload from the message
-        	Bundle extras = intent.getExtras();
-        	if (extras != null) {
-        		// if we are in the foreground, just surface the payload, else post it to the status bar
-                if (PushPlugin.isInForeground()) {
-        		    extras.putBoolean("foreground", true);
-                    PushPlugin.sendExtras(extras);
-        		} else {
-        			extras.putBoolean("foreground", false);
-
-                    // Send a notification if there is a message
-                    if (extras.getString("message") != null && extras.getString("message").length() != 0) {
-                        createNotification(extras);
-                    }
+                // Send a notification if there is a message
+                if (extras.getString("message") != null && extras.getString("message").length() != 0) {
+                    createNotification(this.getApplicationContext(), extras);
                 }
             }
         }
@@ -68,10 +74,10 @@ public class PushIntentService extends IntentService {
         PushBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public void createNotification(Bundle extras)
+    public void createNotification(Context context, Bundle extras)
     {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String appName = getAppName();
+        String appName = getAppName(context);
 
     	Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
     	notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -88,7 +94,7 @@ public class PushIntentService extends IntentService {
     	}
 
     	NotificationCompat.Builder mBuilder =
-    		new NotificationCompat.Builder(this)
+    		new NotificationCompat.Builder(context)
     			.setDefaults(defaults)
     			.setSmallIcon(context.getApplicationInfo().icon)
     			.setWhen(System.currentTimeMillis())
@@ -122,9 +128,9 @@ public class PushIntentService extends IntentService {
     	mNotificationManager.notify((String) appName, notId, mBuilder.build());
     }
 
-    private static String getAppName()
+    private static String getAppName(Context context)
     {
-    	CharSequence appName = this
+    	CharSequence appName = context
     	    .getPackageManager()
     	    .getApplicationLabel(context.getApplicationInfo());
 
