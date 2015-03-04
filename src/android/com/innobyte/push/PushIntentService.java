@@ -1,6 +1,7 @@
 package com.innobyte.push;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,7 +59,7 @@ public class PushIntentService extends IntentService {
 
                     // Send a notification if there is a message
                     if (extras.getString("message") != null && extras.getString("message").length() != 0) {
-                        createNotification(context, extras);
+                        createNotification(extras);
                     }
                 }
             }
@@ -67,10 +68,10 @@ public class PushIntentService extends IntentService {
         PushBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    public void createNotification(Context context, Bundle extras)
+    public void createNotification(Bundle extras)
     {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String appName = getAppName(this);
+        String appName = getAppName();
 
     	Intent notificationIntent = new Intent(this, PushHandlerActivity.class);
     	notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -87,7 +88,7 @@ public class PushIntentService extends IntentService {
     	}
 
     	NotificationCompat.Builder mBuilder =
-    		new NotificationCompat.Builder(context)
+    		new NotificationCompat.Builder(this)
     			.setDefaults(defaults)
     			.setSmallIcon(context.getApplicationInfo().icon)
     			.setWhen(System.currentTimeMillis())
@@ -121,9 +122,9 @@ public class PushIntentService extends IntentService {
     	mNotificationManager.notify((String) appName, notId, mBuilder.build());
     }
 
-    private static String getAppName(Context context)
+    private static String getAppName()
     {
-    	CharSequence appName = context
+    	CharSequence appName = this
     	    .getPackageManager()
     	    .getApplicationLabel(context.getApplicationInfo());
 

@@ -1,4 +1,4 @@
-package com.plugin.gcm;
+package com.innobyte.push;
 
 import android.app.NotificationManager;
 import android.content.Context;
@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
+
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 /**
  * Created by Cosmin Petrescu on 04/03/15.
