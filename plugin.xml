@@ -4,7 +4,7 @@
         xmlns:amazon="http://schemas.android.com/apk/lib/com.amazon.device.ads"
         xmlns:rim="http://www.blackberry.com/ns/widgets"
         id="com.innobyte.cordova.plugins.PushPlugin"
-        version="1.0.0">
+        version="2.4.1">
 
     <name>PushPlugin</name>
     <author>Cosmin Petrescu</author>
@@ -41,6 +41,7 @@
             <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
             <uses-permission android:name="android.permission.WAKE_LOCK"/>
             <uses-permission android:name="android.permission.VIBRATE"/>
+            <uses-permission android:name="android.permission.GET_TASKS"/>
             <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
             <permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
             <uses-permission android:name="$PACKAGE_NAME.permission.C2D_MESSAGE"/>
