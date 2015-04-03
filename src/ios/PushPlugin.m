@@ -191,9 +191,15 @@
     
     // Get the users Device Model, Display Name, Token & Version Number
     UIDevice *dev = [UIDevice currentDevice];
-    [results setValue:dev.name forKey:@"deviceName"];
-    [results setValue:dev.model forKey:@"deviceModel"];
-    [results setValue:dev.systemVersion forKey:@"deviceSystemVersion"];
+    if (nil != dev) {
+        [results setValue:dev.name forKey:@"deviceName"];
+        [results setValue:dev.model forKey:@"deviceModel"];
+        [results setValue:dev.systemVersion forKey:@"deviceSystemVersion"];
+    } else {
+        [results setValue:@"" forKey:@"deviceName"];
+        [results setValue:@"" forKey:@"deviceModel"];
+        [results setValue:@"" forKey:@"deviceSystemVersion"];
+    }
     
     [self successWithDictionary:results];
 }
