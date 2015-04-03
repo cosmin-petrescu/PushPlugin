@@ -126,7 +126,9 @@
         isInline = NO;
         
         if (notificationMessage) {
-            [self notificationReceived];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self notificationReceived];
+            });
         }
     });
 }
@@ -213,16 +215,6 @@
     NSLog(@"Notification received: %@ -- %@", notificationMessage, self.callback);
 
     if (notificationMessage && self.callback) {
-        int sleeped = 0;
-        while (nil == self.webView || [self.webView isLoading]) {
-            [NSThread sleepForTimeInterval:0.1];
-            sleeped++;
-            
-            if (sleeped > 100) {
-                return;
-            }
-        }
-        
         NSMutableString *jsonStr = [NSMutableString stringWithString:@"{"];
 
         [self parseDictionary:notificationMessage intoJSON:jsonStr];
@@ -237,13 +229,11 @@
         [jsonStr appendString:@"}"];
 
         NSLog(@"Msg: %@", jsonStr);
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSString * jsCallBack = [NSString stringWithFormat:@"%@(%@);", self.callback, jsonStr];
-            [self.webView stringByEvaluatingJavaScriptFromString:jsCallBack];
-            
-            self.notificationMessage = nil;
-        });
+        
+        NSString * jsCallBack = [NSString stringWithFormat:@"%@(%@);", self.callback, jsonStr];
+        [self.webView stringByEvaluatingJavaScriptFromString:jsCallBack];
+        
+        self.notificationMessage = nil;
     }
 }
 
