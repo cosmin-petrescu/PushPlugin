@@ -93,13 +93,18 @@ public class PushIntentService extends IntentService {
     		} catch (NumberFormatException e) {}
     	}
 
+    	String title = extras.getString("title");
+    	if (null == title || title.isEmpty()) {
+    	    title = appName;
+    	}
+
     	NotificationCompat.Builder mBuilder =
     		new NotificationCompat.Builder(context)
     			.setDefaults(defaults)
     			.setSmallIcon(context.getApplicationInfo().icon)
     			.setWhen(System.currentTimeMillis())
-    			.setContentTitle(extras.getString("title"))
-    			.setTicker(extras.getString("title"))
+    			.setContentTitle(title)
+    			.setTicker(title)
     			.setContentIntent(contentIntent)
     			.setAutoCancel(true);
 
