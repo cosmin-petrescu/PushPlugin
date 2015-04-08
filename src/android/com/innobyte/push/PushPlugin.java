@@ -237,6 +237,7 @@ public class PushPlugin extends CordovaPlugin {
     {
 		try
 		{
+		    int foreground = 0;
 			JSONObject json;
 			json = new JSONObject().put("event", "message");
 
@@ -254,7 +255,8 @@ public class PushPlugin extends CordovaPlugin {
 				}
 				else if (key.equals("foreground"))
 				{
-					json.put(key, extras.getBoolean("foreground"));
+				    foreground = extras.getInt("foreground");
+					json.put(key, foreground);
 				}
 				else if (key.equals("coldstart"))
 				{
@@ -301,6 +303,7 @@ public class PushPlugin extends CordovaPlugin {
 					}
 				}
 			} // while
+			jsondata.put("foreground", foreground);
 			json.put("payload", jsondata);
 
 			Log.v(TAG, "extrasToJSON: " + json.toString());

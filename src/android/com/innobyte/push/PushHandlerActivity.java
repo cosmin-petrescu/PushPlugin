@@ -44,7 +44,7 @@ public class PushHandlerActivity extends Activity
 		if (extras != null)	{
 			Bundle originalExtras = extras.getBundle("pushBundle");
 
-            originalExtras.putBoolean("foreground", false);
+            originalExtras.putInt("foreground", 0);
             originalExtras.putBoolean("coldstart", !isPushPluginActive);
 
 			PushPlugin.sendExtras(originalExtras);

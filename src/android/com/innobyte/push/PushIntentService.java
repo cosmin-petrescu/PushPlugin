@@ -59,10 +59,10 @@ public class PushIntentService extends IntentService {
         ) {
         	// if we are in the foreground, just surface the payload, else post it to the status bar
             if (PushPlugin.isInForeground()) {
-        	    extras.putBoolean("foreground", true);
+        	    extras.putInt("foreground", 1);
                 PushPlugin.sendExtras(extras);
         	} else {
-        		extras.putBoolean("foreground", false);
+        		extras.putInt("foreground", 0);
 
                 // Send a notification if there is a message
                 if (extras.getString("message") != null && extras.getString("message").length() != 0) {
